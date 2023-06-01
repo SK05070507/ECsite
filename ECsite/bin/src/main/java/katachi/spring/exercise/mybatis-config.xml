@@ -1,0 +1,6 @@
+<plugins>
+    <plugin interceptor="com.github.pagehelper.PageInterceptor">
+        <!-- config params as the following -->
+        <property name="param1" value="value1"/>
+    </plugin>
+</plugins>

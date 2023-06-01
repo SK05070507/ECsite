@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8"></meta>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- CSS読込 -->
+<link rel="stylesheet"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+
+<!-- JS読込 -->
+<script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+<title>商品詳細</title>
+</head>
+<body class="bg-light">
+	<div layout:fragment="content">
+		<div class="container-md">
+			<img class="mt-3" alt="" th:src="${item.itemImage}"
+				th:href="@{'/list/details/' + ${item.id}}" width="210px"
+				height="200px">
+			<div th:text="${item.itemName}"></div>
+			<div th:text="${item.itemPrice} + '円' "></div>
+			<div th:text=" '在庫数  ' + ${item.inventory} + '個' "></div>
+			<div th:text="${item.itemDescription}"></div>
+			<form id="item-add-form" method="post" th:action="@{/list/add}"
+				class="form-input" th:object="${itemAddForm}">
+				<input type="hidden" id="itemId" name="id" th:value="${item.id}">
+				<label>数量：</label> <input type="number" min="0"
+					th:max="${item.inventory}" class="form-control col-4 mb-2"
+					id="cartItemInventory" name="cartItemInventory">
+				<button>カートに入れる</button>
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>

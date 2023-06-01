@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8"></meta>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- CSS読込 -->
+<link rel="stylesheet"
+	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+
+<!-- JS読込 -->
+<script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<title>商品一覧</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container-md">
+			<!-- 検索フォーム  -->
+			<form id="item-search-form" method="get" th:action="@{/list/search}"
+				class="form-inline">
+				<div class="form-group">
+					<label class="col-form-label" for="itemName"></label> <select
+						class="form-control" name="categoryId" id="categoryId">
+						<option value="">全てのカテゴリー</option>
+						<option th:each="item : ${category}" th:value="${item.id}"
+							th:inline="text" th:selected="${item.id == categoryId }">[[${item.categoryName}]]</option>
+					</select> <input type="text" class="form-control" placeholder="商品名"
+						name="itemName" id="itemName" th:value="${itemName}">
+					<button
+						class="btn btn-primary pull-right navbar-brand mb-3 ml-3 mt-3">検索</button>
+				</div>
+			</form>
+			<!--商品リスト -->
+			<div th:text=" 'カートの中の商品の数は' + ${cart.count} + '個です'"></div>
+			<a th:text="カートの中を確認する" th:href="@{/list/cart}"></a>
+			<div class="row">
+				<div class="col-md-4 p-3 shadow-sm p-3 mb-5 rounded "
+					th:each="itemP: ${page.list}">
+					<a th:href="@{'/list/details/' + ${itemP.id}}"><img alt=""
+						th:src="${itemP.itemImage}"
+						th:href="@{'/list/details/' + ${itemP.id}}" width="210px"
+						height="200px"></a>
+					<div>
+						<!-- 改行 -->
+					</div>
+					<a th:text="${itemP.itemName}"
+						th:href="@{'/list/details/' + ${itemP.id}}"></a>
+					<div class="lead" th:text="${itemP.itemPrice} + '円' "></div>
+					<div class="small" th:text=" '在庫数  ' + ${itemP.inventory} + '個' "></div>
+					<a th:href="@{'/list/details/' + ${itemP.id}}"
+						class=" stretched-link"></a>
+				</div>
+			</div>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					<!-- 前のページリンク -->
+					<li class="page-item"
+						th:classappend="${page.pageNum} == 1 ? 'page-item disabled ' : ' ' ">
+						<a class="page-link"
+						th:href="@{${url}(pn=(${page.pageNum-1}),(categoryId=${categoryId}),(itemName=${itemName}) )}">&lt;&lt;</a>
+					</li>
+					<!-- 中間のページリンク -->
+					<li class="page-item"
+						th:each="i:${#numbers.sequence(page.pageNum-2, page.pageNum+2)}"
+						th:if="${ i gt 0  && i le page.pages}"
+						th:classappend="${i}==${page.pageNum} ? 'page-item disabled ' : ' ' ">
+						<span class="page-link" th:if="${i}==${page.pageNum}"
+						th:text="${i}"></span> <a class="page-link"
+						th:if="${i}!=${page.pageNum}"
+						th:href="@{${url}(pn=${i},categoryId=${categoryId},itemName=${itemName} )}">
+							<span th:text="${i}"></span>
+					</a>
+					</li>
+					<!-- 次のページリンク  -->
+					<li class="page-item"
+						th:classappend="${page.pageNum} == ${page.navigateLastPage} ? 'page-item disabled ' : ' ' ">
+						<a class="page-link"
+						th:href="@{${url}(pn=(${page.pageNum+1}),(categoryId=${categoryId}),(itemName=${itemName}) )}">
+							&gt;&gt; </a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+
+
+
+</body>
+</html>

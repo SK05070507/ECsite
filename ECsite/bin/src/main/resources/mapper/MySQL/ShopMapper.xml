@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapperとxmlのマッピング -->
+<mapper namespace="katachi.spring.exercise.repository.ShopMapper">
+
+	<!-- マッピング定義(商品) -->
+	<resultMap
+		type="katachi.spring.exercise.model.MItem" id="item">
+		<id column="id" property="id" />
+		<result column="item_name" property="itemName" />
+		<result column="item_image" property="itemImage" />
+		<result column="item_price" property="itemPrice" />
+		<result column="item_description" property="itemDescription" />
+		<result column="is_deleted" property="isDeleted" />
+		<result column="create_date_time" property="createDateTime" />
+		<result column="update_date_time" property="updateDateTime" />
+		<result column="inventory" property="inventory" />
+		<result column="item_category" property="categoryNumber" />
+	</resultMap>
+
+	<resultMap
+		type="katachi.spring.exercise.model.CartItem" id="Cartitem">
+		<id column="id" property="id" />
+		<result column="item_name" property="itemName" />
+		<result column="item_image" property="itemImage" />
+		<result column="item_price" property="itemPrice" />
+	</resultMap>
+
+	<!-- マッピング定義(カテゴリ) -->
+	<resultMap
+		type="katachi.spring.exercise.model.MCategory" id="Category">
+		<id column="id" property="id" />
+		<result column="category_name" property="categoryName" />
+
+	</resultMap>
+
+
+
+<!-- 商品一覧を取得 -->
+  <select id="findMany"  resultMap="item">
+	select
+		items.id
+		, items.item_name
+		, items.item_image
+		, items.item_price
+		, items.item_description
+		, inventory.inventory
+		, category.category_name
+	from
+  		items
+  	join
+  		inventory
+  	on
+  		items.id = inventory.item_id
+  	join
+  		category
+  	on
+  		items.item_category = category.id
+	where
+		items.is_deleted = 0
+			<if test="name != null">
+	and
+		items.item_name like '%${name}%'
+			</if>
+			<if test="categoryId != null">
+			and
+		items.item_category = #{categoryId}
+			</if>
+
+  </select>
+
+
+  <!-- 商品取得(1件) -->
+  <select id="itemOne"  resultMap="item">
+select
+		items.id
+		, items.item_name
+		, items.item_image
+		, items.item_price
+		, items.item_description
+		, inventory.inventory
+	from
+  		items
+  	join
+  		inventory
+  	on
+  		items.id = inventory.item_id
+	where
+		items.is_deleted = 0
+	and
+		items.id = #{id}
+  </select>
+
+ <!-- 在庫数更新(1件) -->
+ <update id="updateOne" >
+ 	update
+		inventory
+	set
+	inventory = #{itemInventory}
+    where
+    	item_id = #{id}
+
+ </update>
+
+
+ <!-- 在庫数取得(1件) -->
+  <select id="inventoryOne"  resultType="Integer">
+  select
+	inventory
+	from
+		inventory
+	where
+		item_id = #{id}
+  </select>
+
+   <!-- カートの中の商品取得(1件) -->
+   <select id="cartItemOne" resultMap="Cartitem">
+   select
+		items.id
+		, items.item_name
+		, items.item_image
+		, items.item_price
+	from
+  		items
+	where
+		items.is_deleted = 0
+	and
+		items.id = #{id}
+   </select>
+
+   <!-- カテゴリ一覧を取得 -->
+  <select id="findAllCategory"  resultMap="Category">
+  	select
+  		category.id
+  		, category.category_name
+  	from
+  		category
+
+  </select>
+
+
+
+</mapper>

@@ -1,0 +1,15 @@
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  <!-- other configuration -->
+  <property name="plugins">
+    <array>
+      <bean class="com.github.pagehelper.PageInterceptor">
+        <property name="properties">
+          <!-- config params as the following -->
+          <value>
+            param1=value1
+          </value>
+        </property>
+      </bean>
+    </array>
+  </property>
+</bean>
