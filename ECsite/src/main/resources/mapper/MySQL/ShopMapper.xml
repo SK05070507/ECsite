@@ -20,7 +20,6 @@
 		<result column="item_category" property="categoryNumber" />
 	</resultMap>
 
-<!-- マッピング定義(カートの中の商品) -->
 	<resultMap
 		type="katachi.spring.exercise.model.CartItem" id="Cartitem">
 		<id column="id" property="id" />

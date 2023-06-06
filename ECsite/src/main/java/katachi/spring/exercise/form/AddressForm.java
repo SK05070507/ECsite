@@ -4,16 +4,12 @@ import lombok.Data;
 
 @Data
 public class AddressForm {
-	//送り先宛名
-	private String name; 
-	//電話番号
-	private String phoneNumber; 
-	//郵便番号
-	private String postalCoder; 
-	//都道府県
-	private String prefectures; 
-	//市区町村
-	private String municipalities; 
-	 //番地
-	private String number;
+
+	private String name; //送り先宛名
+	private String phoneNumber; //電話番号
+	private String postalCoder; //郵便番号
+	private String prefectures; //都道府県
+	private String municipalities; //市区町村
+	private String number; //番地
+
 }

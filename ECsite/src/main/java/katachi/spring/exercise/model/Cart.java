@@ -37,16 +37,16 @@ public class Cart implements Serializable {
 			errors.rejectValue("cartItemInventory", "cartItemInventory.over");
 			return;
 		}
-		//カートの中に既に同じ商品があった場合、元々の注文数と追加の注文数を足す。
+
 		for (CartItem item : itemList) {
 			if (item.getItemid() == id) {
 				item.add(inventory);
 				return;
 			}
 		}
-		//新規注文の場合、カートの中に注文された商品を追加する
 		MItem item = shopService.itemOne(id);
 		itemList.add(new CartItem(item, inventory));
+
 	}
 
 	//カートリセット
@@ -69,19 +69,23 @@ public class Cart implements Serializable {
 	}
 
 	public boolean change(Integer id, Integer inventory) {
+
 		//在庫数よりも多い注文だとアラート表示
 		if (inventory > shopService.inventoryOne(id)) {
 			errors.rejectValue("cartItemInventory", "cartItemInventory.over");
 			return false;
 		}
+
 		int i = 0;
 		for (CartItem item : itemList) {
+
 			if (id == item.getItemid()) {
 				// 今の個数を取得
 				CartItem itemNew = itemList.get(i);
-				//　注文数更新
 				itemNew.setCartItemInventory(inventory);
+
 				itemList.set(i, itemNew);
+
 			}
 			i++;
 		}
