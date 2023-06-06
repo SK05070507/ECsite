@@ -37,13 +37,14 @@ public class Cart implements Serializable {
 			errors.rejectValue("cartItemInventory", "cartItemInventory.over");
 			return;
 		}
-		//
+		//カートの中に既に商品があった場合、追加の注文数と元々の駐車場を足し合わせる。
 		for (CartItem item : itemList) {
 			if (item.getItemid() == id) {
 				item.add(inventory);
 				return;
 			}
 		}
+		//新規の注文の場合、注文された商品をカートに追加する。
 		MItem item = shopService.itemOne(id);
 		itemList.add(new CartItem(item, inventory));
 
@@ -80,10 +81,10 @@ public class Cart implements Serializable {
 		for (CartItem item : itemList) {
 
 			if (id == item.getItemid()) {
-				// 今の個数を取得
+				//今の注文数を取得
 				CartItem itemNew = itemList.get(i);
+				//注文数更新
 				itemNew.setCartItemInventory(inventory);
-
 				itemList.set(i, itemNew);
 
 			}

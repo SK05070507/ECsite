@@ -11,14 +11,11 @@ import katachi.spring.exercise.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
-
 	@Autowired
 	private UserMapper mapper;
-
 	@Autowired
 	private PasswordEncoder encoder;
-
-	/** ユーザー登録 住所登録 */
+	//ユーザー登録 住所登録
 	@Transactional
 	@Override
 	public void signup(MUser user) {
@@ -27,13 +24,11 @@ public class UserServiceImpl implements UserService {
 		mapper.insertOne(user);
 		mapper.insertAddressOne(user);
 	}
-
 	//住所登録
 	@Override
 	public void insertAddress(MUser user) {
 		mapper.insertAddressOne(user);
 	}
-
 	//ユーザーID重複チェック
 	@Override
 	public boolean userIdOne(String userId) {
