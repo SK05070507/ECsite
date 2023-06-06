@@ -26,6 +26,11 @@ import katachi.spring.exercise.model.CartItem;
 import katachi.spring.exercise.model.MItem;
 import katachi.spring.exercise.service.ShopService;
 
+/**
+ * ショップ画面のControllerクラス
+ * @author K.Shirakawa
+ *
+ */
 @Controller
 public class ShopController {
 
@@ -41,9 +46,8 @@ public class ShopController {
 	@Autowired
 	Cart cart;
 
-	//カート作成
 	/**
-	 * 
+	 * カート作成
 	 * @return
 	 */
 	@ModelAttribute("cart")
@@ -51,12 +55,11 @@ public class ShopController {
 		return new Cart();
 	}
 
-	//商品一覧画面へ遷移
 	/**
+	 * 商品一覧画面へ遷移
 	 * @param item 商品情報
 	 * @param model
 	 * @param pn ページ番号
-	 * @param pageable　ページネーションインスタンス
 	 * @return　商品一覧画面
 	 */
 	@GetMapping("/list")
@@ -66,27 +69,26 @@ public class ShopController {
 			@RequestParam(value = "pn", defaultValue = "1") Integer pn
 			) {
 		//全件表示のためnull
-		String itemName = null; 
+		String itemName = null;
 		//全件表示のためnull
-		Integer categoryId = null; 
+		Integer categoryId = null;
 		//ページネーション設定値(現在番号,表示件数)
-		PageHelper.startPage(pn, 6); 	
+		PageHelper.startPage(pn, 6);
 		//商品リスト呼び出し
-		List<MItem> itemList = shopService.findMany(itemName, categoryId); 
+		List<MItem> itemList = shopService.findMany(itemName, categoryId);
 		//商品リストをページ情報に格納
-		PageInfo<MItem> pageInfo = new PageInfo<>(itemList); 
+		PageInfo<MItem> pageInfo = new PageInfo<>(itemList);
 		//カートの商品個数取得
-		Integer count = cart.count(); 
-		model.addAttribute("page", pageInfo);
-		model.addAttribute("category", shopService.findCategory());
-		model.addAttribute("count", count);
-		model.addAttribute("cart", cart);
+		Integer count = cart.count();
+		model.addAttribute("page", pageInfo);						//ページの情報
+		model.addAttribute("category", shopService.findCategory());	//カテゴリー
+		model.addAttribute("count", count);							//カートの個数
+		model.addAttribute("cart", cart);							//カート
 		return "/shop/list";
 	}
 
-	//商品詳細画面へ遷移
 	/**
-	 * 
+	 * 商品詳細画面へ遷移
 	 * @param id 商品ID
 	 * @param model
 	 * @return 商品詳細画面
@@ -96,15 +98,14 @@ public class ShopController {
 			@PathVariable("id") Integer id,
 			Model model) {
 		//商品詳細情報取得
-		MItem item = shopService.itemOne(id); 
-		model.addAttribute("cart", cart);
-		model.addAttribute("item", item);
+		MItem item = shopService.itemOne(id);
+		model.addAttribute("cart", cart);		//カート
+		model.addAttribute("item", item);		//商品詳細
 		return "/shop/details";
 	}
 
-	//カートに商品を入れる処理
 	/**
-	 * 
+	 * カートに商品を入れる処理
 	 * @param form 商品情報フォーム
 	 * @param bindingResult
 	 * @param model
@@ -120,9 +121,8 @@ public class ShopController {
 		return "redirect:/list";
 	}
 
-	//カートの中を確認する画面へ遷移
 	/**
-	 * 
+	 * カートの詳細画面へ遷移
 	 * @param form 商品情報フォーム
 	 * @param model
 	 * @return カートの中
@@ -133,14 +133,13 @@ public class ShopController {
 			Model model) {
 		//合計金額
 		int money = cart.money();
-		model.addAttribute("money", money);
-		model.addAttribute("cart", cart);
+		model.addAttribute("money", money);	//支払料金総額
+		model.addAttribute("cart", cart);	//カート
 		return "/shop/cart";
 	}
 
-	//住所入力画面へ遷移
 	/**
-	 * 
+	 * 住所入力画面へ遷移
 	 * @param addressForm 送付先住所フォーム
 	 * @param model
 	 * @return　住所入力画面
@@ -155,9 +154,8 @@ public class ShopController {
 		return "/shop/addressForm";
 	}
 
-	//注文内容確認画面へ遷移
 	/**
-	 * 
+	 * 注文内容確認画面へ遷移
 	 * @param addressForm 送付先住所フォーム
 	 * @param model
 	 * @return 注文内容確認
@@ -169,15 +167,15 @@ public class ShopController {
 		//合計金額
 		int money = 0;
 		money = cart.money();
-		model.addAttribute("money", money);
-		model.addAttribute("addressForm", addressForm);
-		model.addAttribute("cart", cart);
+		model.addAttribute("money", money);					//支払料金総額
+		model.addAttribute("addressForm", addressForm);		//送付先住所フォーム
+		model.addAttribute("cart", cart);					//カート
 		return "/shop/voucher";
 	}
 
-	//注文受付完了
+
 	/**
-	 * 
+	 * 注文受付完了
 	 * @param addressForm 送付先住所フォーム
 	 * @return 注文受付完了
 	 */
@@ -198,9 +196,8 @@ public class ShopController {
 		return "/shop/orderCompleted";
 	}
 
-	//注文内容修正
 	/**
-	 * 
+	 * 注文内容修正
 	 * @param addressForm 送付先住所フォーム
 	 * @param model
 	 * @return 注文内容修正
@@ -215,9 +212,8 @@ public class ShopController {
 		return "/shop/addressForm";
 	}
 
-	//カートの中の商品数量変更
 	/**
-	 * 
+	 * カートの中の商品数量変更
 	 * @param form 商品情報フォーム
 	 * @param bindingResult
 	 * @param model
@@ -239,9 +235,8 @@ public class ShopController {
 		return "redirect:/list/cart";
 	}
 
-	//カートの中の商品を削除
 	/**
-	 * 
+	 * カートの中の商品を削除
 	 * @param form 商品情報フォーム
 	 * @param model
 	 * @return カートの中へ
@@ -254,9 +249,8 @@ public class ShopController {
 		return "redirect:/list/cart";
 	}
 
-	//商品検索結果を表示
 	/**
-	 * 
+	 * 商品検索結果を表示
 	 * @param itemName 商品名
 	 * @param categoryId　商品カテゴリー
 	 * @param pn 現在ページ
@@ -265,9 +259,12 @@ public class ShopController {
 	 */
 	@GetMapping(value = "/list/search")
 	public String searchItem(
-			@RequestParam(required = false, value = "itemName", defaultValue = "") String itemName,
-			@RequestParam(value = "categoryId", defaultValue = "") Integer categoryId,
-			@RequestParam(value = "pn", defaultValue = "1") Integer pn, Model model) {
+			@RequestParam(required = false, value = "itemName", defaultValue = "")
+			String itemName,
+			@RequestParam(value = "categoryId", defaultValue = "")
+			Integer categoryId,
+			@RequestParam(value = "pn", defaultValue = "1")
+			Integer pn, Model model) {
 		//ページネーション設定値(現在番号,表示件数)
 		PageHelper.startPage(pn, 6);
 		//商品リスト呼び出し
@@ -276,14 +273,13 @@ public class ShopController {
 		PageInfo<MItem> pageInfo = new PageInfo<>(itemList);
 		//カートの商品個数取得
 		Integer count = cart.count();
-		model.addAttribute("page", pageInfo);
-		model.addAttribute("categoryId", categoryId);
-		model.addAttribute("itemName", itemName);
+		model.addAttribute("page", pageInfo);							//ページ情報
+		model.addAttribute("categoryId", categoryId);					//カテゴリーID
+		model.addAttribute("itemName", itemName);						//検索キーワード
 		//カテゴリー取得
-		model.addAttribute("category", shopService.findCategory());
-		model.addAttribute("count", count);
-		model.addAttribute("cart", cart);
+		model.addAttribute("category", shopService.findCategory());		//カテゴリー
+		model.addAttribute("count", count);								//カートの個数
+		model.addAttribute("cart", cart);								//カート
 		return "/shop/list";
 	}
-
 }

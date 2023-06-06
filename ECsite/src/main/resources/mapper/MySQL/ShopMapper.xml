@@ -134,6 +134,5 @@
   		, category.category_name
   	from
   		category
-
   </select>
 </mapper>
