@@ -37,7 +37,7 @@ public class Cart implements Serializable {
 			errors.rejectValue("cartItemInventory", "cartItemInventory.over");
 			return;
 		}
-
+		//
 		for (CartItem item : itemList) {
 			if (item.getItemid() == id) {
 				item.add(inventory);
